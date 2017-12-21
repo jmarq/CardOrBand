@@ -1,7 +1,6 @@
-import json
+from get_cards import get_cards_json
 
-json_file = open("cards.json","r")
-cards_dict = json.load(json_file)
+cards_dict = get_cards_json()
 
 keys = cards_dict.keys()
 
