@@ -44,3 +44,65 @@ def make_choice(request):
                 }
             request.session['waiting_for_answer'] = False
     return JsonResponse(data)
+
+
+def quiz_question(request):
+    previous_question = request.session.get("previous_question", "")
+    streak = request.session.get("streak",0)
+    if not previous_question:
+    # this is the first question
+        request.session['streak'] = 0
+        question = random_card_or_band()
+        request.session['previous_question'] = question
+        data = {
+            "name": question["name"],
+            "streak": 0,
+            "correctness": "NA"
+        }
+        return JsonResponse(data)
+    else:
+    # user has a question to answer. are they sending an answer? to that question? correct?
+        choice = request.GET.get("choice","")
+        question_name = request.GET.get("name","")
+        if question_name != previous_question['name'] or not choice:
+            print("no choice made, or choice made for wrong question")
+            print("expected question for %s, got %s" % (previous_question['name'],question_name))
+            print("correct answer is %s" % previous_question['type'])
+            # user is answering the wrong question, or they didn't enter a choice
+            data = {
+                "name": previous_question["name"],
+                "streak": request.session.get("streak"),
+                "correctness": "NA",
+            }
+            return JsonResponse(data)
+        else:
+            # user has entered an answer, user is answering the correct question
+            # check for correctness
+            if choice == previous_question['type']:
+                # correct!
+                request.session['streak'] = streak + 1
+                question = random_card_or_band()
+                request.session['previous_question'] = question
+                data = {
+                    "name": question["name"],
+                    "streak": streak + 1,
+                    "correctness": "correct"
+                }
+                return JsonResponse(data)
+            else:
+                # incorrect
+                request.session['streak'] = 0
+                question = random_card_or_band()
+                request.session['previous_question'] = question
+                data = {
+                    "name": question["name"],
+                    "streak": 0,
+                    "correctness": "incorrect"
+                }
+                return JsonResponse(data)
+
+        pass
+
+if __name__ == '__main__':
+    pass
+
