@@ -14,9 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.contrib import admin
+from .views import random_choice, make_choice
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^quiz/', include('quiz.urls')),
+    url(r'^choice/?$', random_choice ,name="quiz_choice"),
+    url(r'^guess/?$', make_choice, name="make_choice"),
 ]

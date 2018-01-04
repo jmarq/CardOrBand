@@ -1,4 +1,4 @@
-from get_cards import get_cards_json
+from .get_cards import get_cards_json
 
 def get_cards_by_color(color="Black"):
     cards_dict = get_cards_json()
