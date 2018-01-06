@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from quiz.utilities.random_choice import random_card_or_band
+import json
 
 # Create your views here.
 
@@ -47,17 +48,22 @@ def make_choice(request):
 
 
 def quiz_question(request):
+
     previous_question = request.session.get("previous_question", "")
+    print(previous_question)
     streak = request.session.get("streak",0)
     if not previous_question:
     # this is the first question
         request.session['streak'] = 0
         question = random_card_or_band()
         request.session['previous_question'] = question
+        print(request.session.get("previous_question", ""))
         data = {
             "name": question["name"],
             "streak": 0,
-            "correctness": "NA"
+            "correctness": "NA",
+            "previous_name": "NA",
+            "previous_guess" : "NA",
         }
         return JsonResponse(data)
     else:
@@ -73,6 +79,8 @@ def quiz_question(request):
                 "name": previous_question["name"],
                 "streak": request.session.get("streak"),
                 "correctness": "NA",
+                "previous_name": "NA",
+                "previous_guess": "NA",
             }
             return JsonResponse(data)
         else:
@@ -86,7 +94,9 @@ def quiz_question(request):
                 data = {
                     "name": question["name"],
                     "streak": streak + 1,
-                    "correctness": "correct"
+                    "correctness": "correct",
+                    "previous_name": previous_question['name'],
+                    "previous_guess": choice,
                 }
                 return JsonResponse(data)
             else:
@@ -97,11 +107,16 @@ def quiz_question(request):
                 data = {
                     "name": question["name"],
                     "streak": 0,
-                    "correctness": "incorrect"
+                    "correctness": "incorrect",
+                    "previous_name": previous_question['name'],
+                    "previous_guess": choice,
                 }
                 return JsonResponse(data)
 
         pass
+
+def quiz_home(request):
+    return render(request, "quiz/main.html",{})
 
 if __name__ == '__main__':
     pass
