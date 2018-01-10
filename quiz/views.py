@@ -40,8 +40,8 @@ def quiz_question(request):
             data = {
                 "name": current_question["name"],
                 "streak": request.session.get("streak"),
-                "correctness": "NA" if choice else "correct" if previous_guess == previous_question['type'] else "incorrect",
-                "previous_name": previous_question['name'],
+                "correctness": "NA" if choice or previous_question == "NA" else "correct" if previous_guess == previous_question['type'] else "incorrect",
+                "previous_name": "NA" if previous_question == "NA" else previous_question['name'],
                 "previous_guess": previous_guess,
             }
             return JsonResponse(data)

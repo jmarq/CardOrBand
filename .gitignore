@@ -6,3 +6,4 @@ local_settings.py
 cards.json
 notes
 quiz/utilities/cards.json
+.coverage
