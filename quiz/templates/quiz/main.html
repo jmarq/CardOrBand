@@ -5,19 +5,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Card or Band?</title>
+    <link rel="stylesheet" href="{% static 'quiz/css/quiz.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Metal+Mania" rel="stylesheet">
 </head>
 <body>
-    <h1>Card or Band?</h1>
-    <h2 class="question">{Question Goes Here}</h2>
-    <button class="card-button">Card</button>
-    <button class="band-button">Band</button>
-    <button class="next" disabled>Next</button>
-    <h3>streak: <span class="streak">0</span></h3>
-    <div class="feedback">
-        <h2>Previous Question:</h2>
-        <h3 class="feedback-name"></h3>
-        <h4>Your Guess: <span class="feedback-choice"></span> - <span class="feedback-correctness"></span></h4>
+    <div class="quiz-wrapper">
+        <h1>Card or Band?</h1>
+        <h2 class="question"></h2>
+        <h2 class="initial-feedback"></h2>
+        <div class="buttons">
+            <button class="card-button">Card</button>
+            <button class="band-button">Band</button>
+            <button class="next" disabled>Next</button>
+        </div>
+        <h3>streak: <span class="streak">0</span></h3>
+        <div class="feedback">
+            <h2>Previous Question:</h2>
+            <h3 class="feedback-name"></h3>
+            <h3>Your Guess: <span class="feedback-choice"></span> - <span class="feedback-correctness"></span></h3>
+        </div>
     </div>
+
 </body>
 <script src="{% static 'quiz/js/quiz.js' %}"></script>
 </html>
