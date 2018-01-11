@@ -62,8 +62,10 @@ class QuizTest(TestCase):
         #prepare a correct answer
         if obj['name'] == "A Card":
             choice = "Card"
+            question_model = Card
         else:
             choice = "Band"
+            question_model = Band
         querystring = "?"+urlencode({
             "name": obj['name'],
             "choice": choice,
@@ -73,12 +75,17 @@ class QuizTest(TestCase):
         obj = response.json()
         self.assertTrue(obj['streak'] == 1)
         self.assertTrue(obj['correctness'] == "correct")
+        self.assertTrue(question_model.objects.first().correct == 1)
+
 
         # now send a wrong answer for the new question
         if obj['name'] == "A Card":
             choice = "Band"
+            question_model = Card
+
         else:
             choice = "Card"
+            question_model = Band
         querystring = "?" + urlencode({
             "name": obj['name'],
             "choice": choice,
@@ -87,6 +94,8 @@ class QuizTest(TestCase):
         obj = response.json()
         self.assertTrue(obj['streak'] == 0)
         self.assertTrue(obj['correctness'] == "incorrect")
+        print(question_model.objects.first().incorrect)
+        self.assertTrue(question_model.objects.first().incorrect == 1)
 
 
 
