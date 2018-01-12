@@ -33,10 +33,10 @@ def quiz_question(request):
         question_name = request.GET.get("name", "")
         # are they sending an answer? to that question?
         if question_name != current_question['name'] or not choice:
+            # user is answering the wrong question, or they didn't enter a choice
             print("no choice made, or choice made for wrong question")
             print("expected question for %s, got %s" % (current_question['name'], question_name))
             print("correct answer is %s" % current_question['type'])
-            # user is answering the wrong question, or they didn't enter a choice
             data = {
                 "name": current_question["name"],
                 "streak": request.session.get("streak"),

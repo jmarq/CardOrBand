@@ -41,7 +41,7 @@ body.correct .feedback, body.incorrect .feedback{
 }
 
 .initial-feedback{
-    display: none;
+		display: none;
 }
 
 .buttons{
