@@ -1,15 +1,27 @@
-from django.test import TestCase, Client, tag
+from django.test import TestCase, Client, tag, RequestFactory
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.sessions.middleware import SessionMiddleware
 from selenium import webdriver
 from unittest import skip
 from django.urls import reverse
 from django.core.cache import cache
 from django.core.management import call_command
 from .models import Card, Band
+from .views import *
 import json
 from urllib.parse import urlencode
 from time import sleep
 
+# code for creating fake requests with sessions for use in tests
+request_factory = RequestFactory()
+
+
+def fake_request(url=reverse("quiz_question"), data={}, with_session=True):
+    r = request_factory.get(url, data)
+    middleware = SessionMiddleware()
+    middleware.process_request(r)
+    r.session.save()
+    return r
 
 
 class ImportQuestionsTest(TestCase):
@@ -68,12 +80,16 @@ class QuizTest(TestCase):
         else:
             choice = "Band"
             question_model = Band
-        querystring = "?"+urlencode({
+        get_params = {
             "name": obj['name'],
             "choice": choice,
-        })
+        }
+        # querystring = "?"+urlencode({
+        #     "name": obj['name'],
+        #     "choice": choice,
+        # })
 
-        response = self.client.get(reverse("quiz_question")+querystring)
+        response = self.client.get(reverse("quiz_question"), get_params)
         obj = response.json()
         self.assertTrue(obj['streak'] == 1)
         self.assertTrue(obj['correctness'] == "correct")
@@ -88,18 +104,39 @@ class QuizTest(TestCase):
         else:
             choice = "Card"
             question_model = Band
-        querystring = "?" + urlencode({
+        get_params = {
             "name": obj['name'],
             "choice": choice,
-        })
-        response = self.client.get(reverse("quiz_question") + querystring)
+        }
+        # querystring = "?" + urlencode({
+        #     "name": obj['name'],
+        #     "choice": choice,
+        # })
+        response = self.client.get(reverse("quiz_question"), get_params)
         obj = response.json()
         self.assertTrue(obj['streak'] == 0)
         self.assertTrue(obj['correctness'] == "incorrect")
         print(question_model.objects.first().incorrect)
         self.assertTrue(question_model.objects.first().incorrect == 1)
+###################################################
+    # testing the subroutines of the main view
+
+    def test_handle_first_question(self):
+        r = fake_request()
+        result = handle_first_question(r)
+        obj = json.loads(str(result.content, encoding="utf8"))
+        self.assertTrue(r.session['streak'] == 0)
+        self.assertTrue(r.session['current_question']['name'] in ['A Card', 'A Band'])
+        self.assertTrue(obj['name'] == r.session['current_question']['name'])
+        self.assertTrue(obj['streak'] == 0)
+        self.assertTrue(obj['correctness'] == 'NA')
+        self.assertTrue(obj['previous_name'] == 'NA')
+        self.assertTrue(obj['previous_guess'] == 'NA')
 
 
+
+###################################################
+    # testing model methods
 
     def test_model_str(self):
         # str method of card/band models should just return the name of the object
@@ -110,6 +147,9 @@ class QuizTest(TestCase):
         card = Card.objects.first()
         card_name = card.name
         self.assertTrue(card_name == str(card))
+
+###################################################
+# new test class for selenium browser tests
 
 
 class SeleniumTests(StaticLiveServerTestCase):
@@ -124,6 +164,7 @@ class SeleniumTests(StaticLiveServerTestCase):
         self.selenium.quit()
         super(SeleniumTests, self).tearDown()
 
+    @tag("browser")
     def testRender(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/quiz/'))
         body = self.selenium.find_element_by_tag_name("body")

@@ -9,6 +9,7 @@ wiki_band_urls = [
     "https://en.wikipedia.org/wiki/List_of_doom_metal_bands",            
 ]
 
+
 def get_wiki_page_bands(url):
     r = requests.get(url)
     text = r.text
@@ -27,9 +28,9 @@ def get_all_wiki_pages():
     bands.sort()
     return bands
 
-if __name__ == "__main__":
-    bands = get_all_wiki_pages()
-    for band in bands:
-        print(band)
+# if __name__ == "__main__":
+#     bands = get_all_wiki_pages()
+#     for band in bands:
+#         print(band)
 
 
