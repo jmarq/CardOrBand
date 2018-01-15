@@ -70,8 +70,9 @@ def handle_valid_question(request):
         # correct!
         # get db object to increment its 'correct' counter
         obj = get_current_question_obj(current_question)
-        obj.correct += 1
-        obj.save()
+        obj.add_correct()
+        # obj.correct += 1
+        # obj.save()
         # update streak, prepare new question
         request.session['streak'] = streak + 1
         question = setup_next_question(request)
@@ -88,8 +89,7 @@ def handle_valid_question(request):
         # incorrect
         # get db object to increment its 'incorrect' counter
         obj = get_current_question_obj(current_question)
-        obj.incorrect += 1
-        obj.save()
+        obj.add_incorrect()
         # update streak, prepare new question
         request.session['streak'] = 0
 

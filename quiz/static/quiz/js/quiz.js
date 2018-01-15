@@ -44,17 +44,6 @@ function hideQuestion(){
 		//question_element.style.height = 0;
 }
 
-//current_question = "";
-
-fetch(quiz_api_url,{credentials:"include"}).then(function(data){
-    return data.json()
-}).then(function(json){
-    //console.dir(json);
-    process_response(json);
-    // don't show feedback for initial load, only for ajax responses triggered by guesses.
-		resetBody();
-		hideInitialFeedback();
-})
 
 function process_response(obj){
     game_state.current_question = question_element.innerHTML = obj.name;
@@ -108,7 +97,6 @@ function guess(url){
     })
 }
 
-//todo: refactor these functions so that they do less and are named more precisely
 function disable_buttons(){
     card_button.disabled = true;
     band_button.disabled = true;
@@ -124,3 +112,15 @@ function enable_buttons(){
 card_button.onclick = click_card;
 band_button.onclick = click_band;
 next_button.onclick = click_next;
+
+
+// fetch the initial question and process the response, setting up the quiz for initial use
+fetch(quiz_api_url,{credentials:"include"}).then(function(data){
+    return data.json()
+}).then(function(json){
+    //console.dir(json);
+    process_response(json);
+    // don't show feedback for initial load, only for ajax responses triggered by guesses.
+		resetBody();
+		hideInitialFeedback();
+});

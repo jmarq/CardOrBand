@@ -11,6 +11,14 @@ class Card(models.Model):
     def __str__(self):
         return self.name
 
+    def add_correct(self):
+        self.correct += 1
+        self.save()
+
+    def add_incorrect(self):
+        self.incorrect += 1
+        self.save()
+
 
 class Band(models.Model):
     name = models.CharField(max_length=200, null=False, blank=False)
@@ -19,3 +27,11 @@ class Band(models.Model):
 
     def __str__(self):
         return self.name
+
+    def add_correct(self):
+        self.correct += 1
+        self.save()
+
+    def add_incorrect(self):
+        self.incorrect += 1
+        self.save()
