@@ -33,6 +33,10 @@ body.correct{
 .question, .initial-feedback{
     font-size: 3rem;
     margin-bottom: 0.5em;
+    display: block;
+}
+.question.hidden, .initial-feedback.hidden{
+    display: none;
 }
 
 .feedback{
@@ -46,10 +50,6 @@ h3{
 
 body.correct .feedback, body.incorrect .feedback{
     color: #ddd;
-}
-
-.initial-feedback{
-		display: none;
 }
 
 .buttons{

@@ -24,45 +24,58 @@ function resetBody(){
     document.body.classList.remove("correct","incorrect");
 }
 
-
 function showInitialFeedback(){
-		initial_feedback_element.style.display = "block";
-		//initial_feedback_element.style.width = "auto";
+		initial_feedback_element.classList.remove("hidden");
 }
-
 
 function hideInitialFeedback(){
-		initial_feedback_element.style.display = "none";
-		//initial_feedback_element.style.width = 0;
-}
+		initial_feedback_element.classList.add("hidden");
 
+}
 
 function showQuestion(){
-		question_element.style.display = "block";
-        //question_element.style.width = "auto";
+        question_element.classList.remove("hidden");
 }
 
-
 function hideQuestion(){
-		question_element.style.display = "none";
-		//question_element.style.width = 0;
+		question_element.classList.add("hidden");
+}
+
+function disable_buttons(){
+    card_button.disabled = true;
+    band_button.disabled = true;
+    next_button.disabled = true;
+    //next_button.disabled = false;
+}
+
+function enable_next_button(){
+    next_button.disabled = false;
+}
+
+function enable_buttons(){
+    card_button.disabled = false;
+    band_button.disabled = false;
+    next_button.disabled = true;
 }
 
 
 function process_response(obj){
+    // hide question to make room for feedback
 	hideQuestion();
+	// update game state
     game_state.current_question = question_element.innerHTML = obj.name;
     game_state.streak = streak_element.innerHTML = obj.streak;
     game_state.feedback_name = feedback_name_element.innerHTML = obj.previous_name;
     game_state.feedback_choice = feedback_choice_element.innerHTML = obj.previous_guess;
     game_state.feedback_correctness = initial_feedback_element.innerHTML = feedback_correctness_element.innerHTML = obj.correctness;
-//    console.dir(game_state);
-//    console.log(create_querystring("band"));
-		resetBody();
+
+    // apply feedback decoration
+	resetBody();
     if(game_state.feedback_correctness != "NA"){
         document.body.classList.add(game_state.feedback_correctness);
     }
-		showInitialFeedback();
+    showInitialFeedback();
+    enable_next_button();
 }
 
 function create_querystring(choice){
@@ -72,6 +85,16 @@ function create_querystring(choice){
     qstring += "name="+name_value;
     qstring += "&choice="+choice_value;
     return qstring;
+}
+
+function guess(url){
+    disable_buttons();
+    fetch(url,{credentials:"include"}).then(function(data){
+        return data.json()
+    }).then(function(json){
+        //console.dir(json);
+        process_response(json);
+    })
 }
 
 function click_band(){
@@ -91,32 +114,9 @@ function click_next(){
 		resetBody();
 }
 
-function guess(url){
-    disable_buttons();
-    fetch(url,{credentials:"include"}).then(function(data){
-        return data.json()
-    }).then(function(json){
-        //console.dir(json);
-        process_response(json);
-    })
-}
-
-function disable_buttons(){
-    card_button.disabled = true;
-    band_button.disabled = true;
-    next_button.disabled = false;
-}
-
-function enable_buttons(){
-    card_button.disabled = false;
-    band_button.disabled = false;
-    next_button.disabled = true;
-}
-
 card_button.onclick = click_card;
 band_button.onclick = click_band;
 next_button.onclick = click_next;
-
 
 // fetch the initial question and process the response, setting up the quiz for initial use
 fetch(quiz_api_url,{credentials:"include"}).then(function(data){
@@ -128,4 +128,5 @@ fetch(quiz_api_url,{credentials:"include"}).then(function(data){
 		resetBody();
 		hideInitialFeedback();
 		showQuestion();
+		enable_buttons();
 });
