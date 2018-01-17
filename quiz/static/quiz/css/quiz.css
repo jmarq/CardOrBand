@@ -27,13 +27,21 @@ body.correct{
     font-weight: normal;
 }
 
+.main-display{
+    min-height: 94px;
+}
 .question, .initial-feedback{
     font-size: 3rem;
+    margin-bottom: 0.5em;
 }
 
 .feedback{
     font-size: 0.8rem;
     color: #939393;
+}
+
+h3{
+    font-size: 1.5rem;
 }
 
 body.correct .feedback, body.incorrect .feedback{
@@ -59,4 +67,69 @@ button{
     font-family: "Metal Mania";
     border-radius: 8px;
     font-size: 2rem;
+}
+
+@media (min-width: 50rem){
+
+.question, .initial-feedback{
+    font-size: 4rem;
+}
+
+.feedback{
+    font-size: 1.7rem;
+}
+
+.buttons{
+    height: 4.0rem;
+}
+button[disabled]{
+    padding-top: 0.625rem;
+    padding-bottom: 0.55rem;
+}
+button{
+    transition: 300ms ease-in-out;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-family: "Metal Mania";
+    border-radius: 0.5rem;
+    font-size: 2.5rem;
+}
+
+h3{
+    font-size: 2rem;
+}
+
+}
+
+
+@media (min-width: 90rem){
+
+.question, .initial-feedback{
+    font-size: 5rem;
+}
+
+.feedback{
+    font-size: 2.7rem;
+}
+
+.buttons{
+    height: 7.0rem;
+}
+button[disabled]{
+    padding-top: 1.625rem;
+    padding-bottom: 1.55rem;
+}
+button{
+    transition: 300ms ease-in-out;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    font-family: "Metal Mania";
+    border-radius: 1.5rem;
+    font-size: 3.5rem;
+}
+
+h3{
+    font-size: 2rem;
+}
+
 }

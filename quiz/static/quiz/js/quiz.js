@@ -24,28 +24,33 @@ function resetBody(){
     document.body.classList.remove("correct","incorrect");
 }
 
-function hideInitialFeedback(){
-		initial_feedback_element.style.display = "none";
-		//initial_feedback_element.style.height = 0;
-}
 
 function showInitialFeedback(){
 		initial_feedback_element.style.display = "block";
-		//initial_feedback_element.style.height = "3em";
+		//initial_feedback_element.style.width = "auto";
 }
+
+
+function hideInitialFeedback(){
+		initial_feedback_element.style.display = "none";
+		//initial_feedback_element.style.width = 0;
+}
+
 
 function showQuestion(){
 		question_element.style.display = "block";
-//  question_element.style.height = "3em";
+        //question_element.style.width = "auto";
 }
+
 
 function hideQuestion(){
 		question_element.style.display = "none";
-		//question_element.style.height = 0;
+		//question_element.style.width = 0;
 }
 
 
 function process_response(obj){
+	hideQuestion();
     game_state.current_question = question_element.innerHTML = obj.name;
     game_state.streak = streak_element.innerHTML = obj.streak;
     game_state.feedback_name = feedback_name_element.innerHTML = obj.previous_name;
@@ -87,7 +92,6 @@ function click_next(){
 }
 
 function guess(url){
-		hideQuestion();
     disable_buttons();
     fetch(url,{credentials:"include"}).then(function(data){
         return data.json()
@@ -123,4 +127,5 @@ fetch(quiz_api_url,{credentials:"include"}).then(function(data){
     // don't show feedback for initial load, only for ajax responses triggered by guesses.
 		resetBody();
 		hideInitialFeedback();
+		showQuestion();
 });

@@ -4,6 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Card or Band?</title>
     <link rel="stylesheet" href="{% static 'quiz/css/quiz.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Metal+Mania" rel="stylesheet">
@@ -12,8 +13,10 @@
     <div class="quiz-wrapper">
         <h1>Card or Band?</h1>
         <p>Does the name belong to a black Magic the Gathering card or a metal band?</p>
-        <h2 class="question"></h2>
-        <h2 class="initial-feedback"></h2>
+        <div class="main-display">
+            <h2 class="question"></h2>
+            <h2 class="initial-feedback"></h2>
+        </div>
         <div class="buttons">
             <button class="card-button">Card</button>
             <button class="band-button">Band</button>
