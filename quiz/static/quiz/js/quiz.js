@@ -25,20 +25,20 @@ function resetBody(){
 }
 
 function showInitialFeedback(){
-		initial_feedback_element.classList.remove("hidden");
+	initial_feedback_element.classList.remove("hidden");
 }
 
 function hideInitialFeedback(){
-		initial_feedback_element.classList.add("hidden");
+	initial_feedback_element.classList.add("hidden");
 
 }
 
 function showQuestion(){
-        question_element.classList.remove("hidden");
+    question_element.classList.remove("hidden");
 }
 
 function hideQuestion(){
-		question_element.classList.add("hidden");
+	question_element.classList.add("hidden");
 }
 
 function disable_buttons(){
@@ -87,14 +87,11 @@ function create_querystring(choice){
     return qstring;
 }
 
-function guess(url){
+async function guess(url){
     disable_buttons();
-    fetch(url,{credentials:"include"}).then(function(data){
-        return data.json()
-    }).then(function(json){
-        //console.dir(json);
-        process_response(json);
-    })
+    var response = await fetch(url,{credentials:"include"});
+    var json = await response.json();
+    process_response(json);
 }
 
 function click_band(){
@@ -108,25 +105,23 @@ function click_card(){
 }
 
 function click_next(){
-		hideInitialFeedback();
-		showQuestion();
-		enable_buttons();
-		resetBody();
+    hideInitialFeedback();
+    showQuestion();
+    enable_buttons();
+    resetBody();
 }
 
 card_button.onclick = click_card;
 band_button.onclick = click_band;
 next_button.onclick = click_next;
 
-// fetch the initial question and process the response, setting up the quiz for initial use
-fetch(quiz_api_url,{credentials:"include"}).then(function(data){
-    return data.json()
-}).then(function(json){
-    //console.dir(json);
-    process_response(json);
+// send an initial "guess" request (without a submitted choice) to get the initial question
+guess(quiz_api_url).then(function(){
     // don't show feedback for initial load, only for ajax responses triggered by guesses.
-		resetBody();
-		hideInitialFeedback();
-		showQuestion();
-		enable_buttons();
-});
+    hideInitialFeedback();
+    resetBody();
+    showQuestion();
+    enable_buttons();
+})
+
+
