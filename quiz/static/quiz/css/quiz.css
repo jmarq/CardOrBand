@@ -55,11 +55,13 @@ body.correct .feedback, body.incorrect .feedback{
 .buttons{
     height: 3.5rem;
 }
+
 button[disabled]{
     padding-top: 0.125rem;
     padding-bottom: 0.05rem;
     color: #999;
 }
+
 button{
     transition: 300ms ease-in-out;
     padding-top: 0.5rem;

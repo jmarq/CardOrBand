@@ -19,13 +19,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'er=0dhl$-_fr+v!)e(@25g8(_75k!yiym19q_hu_ss9w#7mf#k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+# set environment variable to turn debug off
+DEBUG = not bool(os.environ.get("DJANGO_MTG_DEBUG_OFF", False))
 ALLOWED_HOSTS = ['*']
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'er=0dhl$-_fr+v!)e(@25g8(_75k!yiym19q_hu_ss9w#7mf#k'
+# IMPORTANT: set DJANGO_MTG_SECRET_KEY env variable in production
+if not DEBUG:
+    SECRET_KEY = os.environ.get("DJANGO_MTG_SECRET_KEY", SECRET_KEY)
 
 
 # Application definition

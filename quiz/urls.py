@@ -18,7 +18,5 @@ from .views import quiz_question, quiz_home #,random_choice, make_choice,
 
 urlpatterns = [
     url(r'^/?$',quiz_home, name="quiz_home"),
-    # url(r'^choice/?$', random_choice ,name="quiz_choice"),
-    # url(r'^guess/?$', make_choice, name="make_choice"),
     url(r'^quiz/?$', quiz_question, name="quiz_question"),
 ]
