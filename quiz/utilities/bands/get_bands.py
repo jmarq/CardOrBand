@@ -20,6 +20,7 @@ def get_wiki_page_bands(url):
         band_names.append(sup.parent.a.text)
     return band_names
 
+
 def get_all_wiki_pages():
     bands = []
     for url in wiki_band_urls:
