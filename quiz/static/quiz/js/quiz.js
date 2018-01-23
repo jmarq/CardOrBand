@@ -95,12 +95,12 @@ async function guess(url){
 }
 
 function click_band(){
-    choice_url = quiz_api_url+create_querystring("Band");
+    var choice_url = quiz_api_url+create_querystring("Band");
     guess(choice_url);
 }
 
 function click_card(){
-    choice_url = quiz_api_url+create_querystring("Card");
+    var choice_url = quiz_api_url+create_querystring("Card");
     guess(choice_url);
 }
 
