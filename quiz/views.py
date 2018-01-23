@@ -28,9 +28,6 @@ def handle_wrong_question_or_no_choice(request):
     previous_question = request.session.get("previous_question", "NA")
     previous_guess = request.session.get("previous_guess", "NA")
 
-    print("no choice made, or choice made for wrong question")
-    print("expected question for %s, got %s" % (current_question['name'], question_name))
-    print("correct answer is %s" % current_question['type'])
     data = {
         "name": current_question["name"],
         "streak": request.session.get("streak"),
@@ -124,6 +121,7 @@ def quiz_question(request):
             return handle_valid_question(request)
 
 
+# the page that actually renders the markup "skeleton" and loads the js/css for the quiz
 def quiz_home(request):
     return render(request, "quiz/main.html", {})
 
