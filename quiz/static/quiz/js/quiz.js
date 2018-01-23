@@ -1,5 +1,4 @@
 
-//quiz_api_url = "http://localhost:8000/quiz/quiz";
 
 //select elements here and store the result so we don't repeat querySelector operations
 question_element = document.querySelector(".question");
