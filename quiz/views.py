@@ -8,12 +8,14 @@ import json
 
 def handle_first_question(request):
     request.session['streak'] = 0
+    request.session['high_streak'] = 0
     question = random_card_or_band()
     request.session['current_question'] = question
     print(request.session.get("current_question", ""))
     data = {
         "name": question["name"],
         "streak": 0,
+        "high_streak": 0,
         "correctness": "NA",
         "previous_name": "NA",
         "previous_guess": "NA",
@@ -31,6 +33,7 @@ def handle_wrong_question_or_no_choice(request):
     data = {
         "name": current_question["name"],
         "streak": request.session.get("streak"),
+        "high_streak": request.session.get("high_streak",0),
         "correctness": "NA" if choice or previous_question == "NA"
         else "correct" if previous_guess == previous_question['type']
         else "incorrect",
@@ -69,12 +72,16 @@ def handle_valid_question(request):
         obj = get_current_question_obj(current_question)
         obj.add_correct()
         # update streak, prepare new question
-        request.session['streak'] = streak + 1
+        new_streak = streak + 1
+        request.session['streak'] = new_streak
+        if new_streak > request.session.get('high_streak', 0):
+            request.session['high_streak'] = new_streak
         question = setup_next_question(request)
 
         data = {
             "name": question["name"],
-            "streak": streak + 1,
+            "streak": new_streak,
+            "high_streak": request.session.get('high_streak', 0),
             "correctness": "correct",
             "previous_name": current_question['name'],
             "previous_guess": choice,
@@ -93,6 +100,7 @@ def handle_valid_question(request):
         data = {
             "name": question["name"],
             "streak": 0,
+            "high_streak": request.session.get('high_streak', 0),
             "correctness": "incorrect",
             "previous_name": current_question['name'],
             "previous_guess": choice,

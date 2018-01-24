@@ -166,7 +166,7 @@ class SeleniumTests(StaticLiveServerTestCase):
 
     @tag("browser")
     def testRender(self):
-        self.selenium.get('%s%s' % (self.live_server_url, '/quiz/'))
+        self.selenium.get('%s%s' % (self.live_server_url, '/'))
         body = self.selenium.find_element_by_tag_name("body")
         question_element = self.selenium.find_element_by_class_name("question")
         question_text = question_element.text

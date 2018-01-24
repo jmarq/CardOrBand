@@ -6,6 +6,7 @@ card_button = document.querySelector(".card-button");
 band_button = document.querySelector(".band-button");
 next_button = document.querySelector(".next");
 streak_element = document.querySelector(".streak");
+high_streak_element = document.querySelector(".high-streak");
 initial_feedback_element = document.querySelector(".initial-feedback");
 feedback_correctness_element = document.querySelector(".feedback-correctness");
 feedback_choice_element = document.querySelector(".feedback-choice");
@@ -17,6 +18,7 @@ game_state = {
     feedback_correctness: "NA",
     feedback_name: "NA",
     feedback_choice: "NA",
+    high_streak: 0,
 }
 
 function resetBody(){
@@ -63,7 +65,9 @@ function process_response(obj){
 	hideQuestion();
 	// update game state
     game_state.current_question = question_element.innerHTML = obj.name;
-    game_state.streak = streak_element.innerHTML = obj.streak;
+    //game_state.streak = streak_element.innerHTML = obj.streak;
+    game_state.streak = obj.streak;
+    game_state.high_streak = obj.high_streak;
     game_state.feedback_name = feedback_name_element.innerHTML = obj.previous_name;
     game_state.feedback_choice = feedback_choice_element.innerHTML = obj.previous_guess;
     game_state.feedback_correctness = initial_feedback_element.innerHTML = feedback_correctness_element.innerHTML = obj.correctness;
@@ -93,6 +97,11 @@ async function guess(url){
     process_response(json);
 }
 
+function updateCurrentStreak(){
+    streak_element.innerHTML = game_state.streak;
+    high_streak_element.innerHTML = game_state.high_streak;
+}
+
 function click_band(){
     var choice_url = quiz_api_url+create_querystring("Band");
     guess(choice_url);
@@ -107,6 +116,8 @@ function click_next(){
     hideInitialFeedback();
     showQuestion();
     enable_buttons();
+    // show the new streak only after next is clicked, so user can see old streak and reflect on their loss
+    updateCurrentStreak();
     resetBody();
 }
 
@@ -121,6 +132,7 @@ guess(quiz_api_url).then(function(){
     resetBody();
     showQuestion();
     enable_buttons();
+    updateCurrentStreak();
 })
 
 
